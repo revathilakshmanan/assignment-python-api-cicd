@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-api-deployment
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: message-api
+  template:
+    metadata:
+      labels:
+        app: message-api
+    spec:
+      containers:
+      - name: message-api
+        image: message-api:latest
+        ports:
+        - containerPort: 8000
+      - name: vector-logger
+        image: timberio/vector:latest
+        args: ["--config-toml", "/etc/vector/config/vector.toml"]
